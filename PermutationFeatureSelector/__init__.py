@@ -1,1 +1,1 @@
-from PermutationFeatureSelector import PermutationFeatureSelector
+from .PermutationFeatureSelector import PermutationFeatureSelector
