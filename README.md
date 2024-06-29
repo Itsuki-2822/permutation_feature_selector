@@ -1,6 +1,6 @@
 # Permutation Feature Selector
 [![Upload Python Package](https://github.com/Itsuki-2822/PermutationFeatureSelector/actions/workflows/pypi-publish.yml/badge.svg?event=release)](https://github.com/Itsuki-2822/PermutationFeatureSelector/actions/workflows/pypi-publish.yml)
-![Python Versions](https://img.shields.io/pypi/pyversions/PermutationFeatureSelector.svg?logo=python&logoColor=white)
+![Python Versions](https://img.shields.io/pypi/pyversions/permutation_feature_selector.svg?logo=python&logoColor=white)
 
 
 ## Acknowledgements
