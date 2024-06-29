@@ -1,5 +1,5 @@
 # Permutation Feature Selector
-[![Upload Python Package](https://github.com/Itsuki-2822/PermutationFeatureSelector/blob/main/.github/workflows/pypi-publish.yml/badge.svg)](https://github.com/Itsuki-2822/PermutationFeatureSelector/blob/main/.github/workflows/pypi-publish.yml)
+[![Upload Python Package](https://github.com/Itsuki-2822/PermutationFeatureSelector/actions/workflows/pypi-publish.yml/badge.svg?event=release)](https://github.com/Itsuki-2822/PermutationFeatureSelector/actions/workflows/pypi-publish.yml)
 
 
 ## Acknowledgements
