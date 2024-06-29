@@ -9,7 +9,7 @@ setup(
     description='A package for calculating permutation importance and selecting features.',
     author='Itsuki Ito',
     author_email='itoitsuki.28@gmail.com',
-    url='https://github.com/Itsuki-2822/PermutationFeatureSelector', 
+    url='https://github.com/Itsuki-2822/permutation_feature_selector', 
     packages=find_packages(),
     install_requires=[
         'numpy',
