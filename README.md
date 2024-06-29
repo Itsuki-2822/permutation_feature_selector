@@ -1,4 +1,7 @@
 # Permutation Feature Selector
+[![Upload Python Package](https://github.com/Itsuki-2822/PermutationFeatureSelector/blob/main/.github/workflows/pypi-publish.yml/badge.svg)](https://github.com/Itsuki-2822/PermutationFeatureSelector/blob/main/.github/workflows/pypi-publish.yml)
+
+
 ## Acknowledgements
 This library is inspired by the functionality and design of **Scikit-learn's permutation importance**.
 
