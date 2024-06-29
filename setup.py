@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='PermutationFeatureSelector',
-    version='0.1.3',
+    version='0.1.4',
     description='A package for calculating permutation importance and selecting features.',
     author='Itsuki Ito',
     author_email='itoitsuki.28@gmail.com',
