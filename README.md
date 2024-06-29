@@ -1,5 +1,5 @@
 # Permutation Feature Selector
-[![Upload Python Package](https://github.com/Itsuki-2822/PermutationFeatureSelector/actions/workflows/pypi-publish.yml/badge.svg?event=release)](https://github.com/Itsuki-2822/PermutationFeatureSelector/actions/workflows/pypi-publish.yml)
+[![Upload Python Package](https://github.com/Itsuki-2822/permutation_feature_selector/actions/workflows/pypi-publish.yml/badge.svg?event=release)](https://github.com/Itsuki-2822/permutation_feature_selector/actions/workflows/pypi-publish.yml)
 ![Python Versions](https://img.shields.io/pypi/pyversions/permutation_feature_selector.svg?logo=python&logoColor=white)
 
 
@@ -7,7 +7,7 @@
 This library is inspired by the functionality and design of **Scikit-learn's permutation importance**.
 
 ## Links
-PyPI：https://pypi.org/project/PermutationFeatureSelector/
+PyPI：https://pypi.org/project/permutation_feature_selector/
 
 ## Installation
 To install the Library,
@@ -16,20 +16,20 @@ To install the Library,
 
 You can install the package directly from PyPI using pip. This is the easiest and most common method:
 ```bash
-$ pip install PermutationFeatureSelector
+$ pip install permutation_feature_selector
 ```
 ### Installation from Source
 If you prefer to install from the source or if you want the latest version that may not yet be released on PyPI, you can use the following commands:
 ```bash
-$ git clone https://github.com/Itsuki-2822/PermutationFeatureSelector.git
-$ cd PermutationFeatureSelector
+$ git clone https://github.com/Itsuki-2822/permutation_feature_selector.git
+$ cd permutation_feature_selector
 $ python setup.py install
 ```
 ### For developer
 If you are a contributor or if you want to install the latest development version of the library, use the following command to install directly from the GitHub repository:
 
 ```bash
-$ pip install --upgrade git+https://github.com/Itsuki-2822/PermutationFeatureSelector
+$ pip install --upgrade git+https://github.com/Itsuki-2822/permutation_feature_selector
 ```
 
 ## What Permutation Importance
@@ -63,7 +63,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_diabetes
 import lightgbm as lgb
 import matplotlib.pyplot as plt
-from PermutationFeatureSelector import PermutationFeatureSelector
+from permutation_feature_selector import PermutationFeatureSelector
 
 data = load_diabetes()
 X = pd.DataFrame(data.data, columns=data.feature_names)
