@@ -58,34 +58,27 @@ import lightgbm as lgb
 import matplotlib.pyplot as plt
 from PermutationFeatureSelector import PermutationFeatureSelector
 
-# サンプルデータセットの読み込み（糖尿病データセット）
 data = load_diabetes()
 X = pd.DataFrame(data.data, columns=data.feature_names)
 y = data.target
 
-# トレーニングデータとテストデータに分割
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# LightGBMモデルのトレーニング
 model = lgb.LGBMRegressor()
 model.fit(X_train, y_train)
 
-# PermutationFeatureSelectorのインスタンスを作成
 selector = PermutationFeatureSelector(model, X_test, y_test, metric='rmse', n_repeats=30, random_state=42)
 
-# 順列重要度の計算
+# Calculation of permutation importance
 perm_importance = selector.calculate_permutation_importance()
-print("Permutation Importances:")
 print(perm_importance)
 
-# 順列重要度のプロット
+# Permutation Importance Plot
 selector.plot_permutation_importance()
 
-# 特徴量の選択（例：重要度が平均の1倍以上の特徴量を選択）
+# Feature selection (e.g., select features with importance at least 1x the average)
 chosen_features, chosen_features_df = selector.choose_feat(threshold_method='mean', threshold_value=1.0)
-print("Chosen Features:")
 print(chosen_features)
-print("Chosen Features DataFrame:")
 print(chosen_features_df)
 
 ```
