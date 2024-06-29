@@ -1,4 +1,5 @@
 # Permutation Feature Selector
+[![Run Tests](https://github.com/Itsuki-2822/permutation_feature_selector/actions/workflows/test.yml/badge.svg)](https://github.com/Itsuki-2822/permutation_feature_selector/actions/workflows/test.yml)
 [![Upload Python Package](https://github.com/Itsuki-2822/permutation_feature_selector/actions/workflows/pypi-publish.yml/badge.svg?event=release)](https://github.com/Itsuki-2822/permutation_feature_selector/actions/workflows/pypi-publish.yml)
 ![Python Versions](https://img.shields.io/pypi/pyversions/permutation_feature_selector.svg?logo=python&logoColor=white)
 
