@@ -87,6 +87,7 @@ print(chosen_features_df)
 #### scikit-learn.org：
 - https://scikit-learn.org/stable/modules/permutation_importance.html
 - https://scikit-learn.org/stable/auto_examples/inspection/plot_permutation_importance.html#sphx-glr-auto-examples-inspection-plot-permutation-importance-py
+- https://github.com/scikit-learn/scikit-learn/blob/2621573e6/sklearn/inspection/_permutation_importance.py#L111
 
 #### medium.com：
 - https://medium.com/@TheDataScience-ProF/permutation-importance-c784e3f8a439
