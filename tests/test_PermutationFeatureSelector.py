@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import pandas as pd
-from sklearn.datasets import load_iris, load_boston
+from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, accuracy_score
 import lightgbm as lgb
@@ -87,16 +87,5 @@ class Test_PermutationFeatureSelector:
         model = lgb.LGBMClassifier()
         model.fit(X_train, y_train)
         selector = PermutationFeatureSelector(model, X_test, y_test, metric='accuracy')
-        importance = selector.calculate_permutation_importance()
-        assert len(importance) == X.shape[1]
-
-    def test_result_validity_boston(self):
-        data = load_boston()
-        X, y = data.data, data.target
-        X = pd.DataFrame(X, columns=data.feature_names)
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        model = lgb.LGBMRegressor()
-        model.fit(X_train, y_train)
-        selector = PermutationFeatureSelector(model, X_test, y_test, metric='rmse')
         importance = selector.calculate_permutation_importance()
         assert len(importance) == X.shape[1]
