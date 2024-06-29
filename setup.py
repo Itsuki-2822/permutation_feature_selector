@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='PermutationFeatureSelector',
+    name='permutation_feature_selector',
     version='0.1.6',
     description='A package for calculating permutation importance and selecting features.',
     author='Itsuki Ito',
