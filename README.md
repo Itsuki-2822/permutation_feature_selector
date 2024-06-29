@@ -1,4 +1,7 @@
 # Permutation Feature Selector
+## Acknowledgements
+This library is inspired by the functionality and design of **Scikit-learn's permutation importance**.
+
 ## Links
 PyPI：https://pypi.org/project/PermutationFeatureSelector/
 
