@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error, roc_auc_score, accuracy_score
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error, roc_auc_score, accuracy_score, f1_score
 import matplotlib.pyplot as plt
 import lightgbm as lgb
+from sklearn.base import clone
 
 class PermutationFeatureSelector:
     def __init__(self, model, X_test, y_test, metric='rmse', n_repeats=30, random_state=None):
@@ -13,6 +14,7 @@ class PermutationFeatureSelector:
         self.n_repeats = n_repeats
         self.random_state = random_state
         self.use_wrapper = self._should_use_wrapper()
+        self.metric_funcs = self._init_metric_funcs()
         self.base_score = self._calculate_base_score()
         self.perm_importance = None
         if self.random_state is not None:
@@ -21,10 +23,22 @@ class PermutationFeatureSelector:
     def _should_use_wrapper(self):
         return isinstance(self.model, lgb.Booster)
 
+    def _init_metric_funcs(self):
+        return {
+            'rmse': lambda y, y_pred: -np.sqrt(mean_squared_error(y, y_pred)),
+            'mae': lambda y, y_pred: -mean_absolute_error(y, y_pred),
+            'r2': r2_score,
+            'mape': lambda y, y_pred: -mean_absolute_percentage_error(y, y_pred),
+            'auc': roc_auc_score,
+            'accuracy': accuracy_score,
+            'f1': f1_score
+        }
+
     class ModelWrapper:
-        def __init__(self, model, use_wrapper):
+        def __init__(self, model, use_wrapper, metric_funcs):
             self.model = model
             self.use_wrapper = use_wrapper
+            self.metric_funcs = metric_funcs
 
         def predict(self, X):
             if self.use_wrapper:
@@ -33,30 +47,19 @@ class PermutationFeatureSelector:
                 return self.model.predict(X)
 
         def score(self, X, y, metric):
-            preds = self.predict(X)
-            if metric == 'rmse':
-                return -np.sqrt(mean_squared_error(y, preds))
-            elif metric == 'mae':
-                return -mean_absolute_error(y, preds)
-            elif metric == 'r2':
-                return r2_score(y, preds)
-            elif metric == 'mape':
-                return -mean_absolute_percentage_error(y, preds)
-            elif metric == 'auc':
-                return roc_auc_score(y, preds)
-            elif metric == 'accuracy':
-                if self.use_wrapper:
-                    preds = (preds > 0.5).astype(int)
-                return accuracy_score(y, preds)
-            else:
+            if metric not in self.metric_funcs:
                 raise ValueError(f"Unsupported metric: {metric}")
+            preds = self.predict(X)
+            if metric in ['accuracy', 'f1'] and self.use_wrapper:
+                preds = (preds > 0.5).astype(int)
+            return self.metric_funcs[metric](y, preds)
 
     def _calculate_base_score(self):
-        wrapped_model = self.ModelWrapper(self.model, self.use_wrapper)
+        wrapped_model = self.ModelWrapper(self.model, self.use_wrapper, self.metric_funcs)
         return wrapped_model.score(self.X_test, self.y_test, self.metric)
 
     def calculate_permutation_importance(self):
-        wrapped_model = self.ModelWrapper(self.model, self.use_wrapper)
+        wrapped_model = self.ModelWrapper(self.model, self.use_wrapper, self.metric_funcs)
         feature_importances = np.zeros(self.X_test.shape[1])
 
         for col in range(self.X_test.shape[1]):
