@@ -3,7 +3,6 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error, roc_auc_score, accuracy_score, f1_score
 import matplotlib.pyplot as plt
 import lightgbm as lgb
-from sklearn.base import clone
 
 class PermutationFeatureSelector:
     def __init__(self, model, X_test, y_test, metric='rmse', n_repeats=30, random_state=None):
@@ -13,15 +12,12 @@ class PermutationFeatureSelector:
         self.metric = metric
         self.n_repeats = n_repeats
         self.random_state = random_state
-        self.use_wrapper = self._should_use_wrapper()
+        self.use_wrapper = isinstance(self.model, lgb.Booster)
         self.metric_funcs = self._init_metric_funcs()
         self.base_score = self._calculate_base_score()
         self.perm_importance = None
         if self.random_state is not None:
             np.random.seed(self.random_state)
-
-    def _should_use_wrapper(self):
-        return isinstance(self.model, lgb.Booster)
 
     def _init_metric_funcs(self):
         return {
@@ -42,7 +38,7 @@ class PermutationFeatureSelector:
 
         def predict(self, X):
             if self.use_wrapper:
-                return self.model.predict(X, num_iteration=self.model.best_iteration)
+                return self.model.predict(X, num_iteration=-1)  # 修正: `best_iteration` ではなく `-1` をデフォルト
             else:
                 return self.model.predict(X)
 
@@ -69,8 +65,12 @@ class PermutationFeatureSelector:
                 X_permuted.iloc[:, col] = np.random.permutation(X_permuted.iloc[:, col])
                 permuted_score = wrapped_model.score(X_permuted.values, self.y_test, self.metric)
                 scores[n] = permuted_score
-            feature_importances[col] = self.base_score - np.mean(scores)
-
+            
+            if np.isnan(scores).all():
+                feature_importances[col] = 0  
+            else:
+                feature_importances[col] = self.base_score - np.nanmean(scores) 
+        
         self.perm_importance = feature_importances
         return feature_importances
 
@@ -79,6 +79,7 @@ class PermutationFeatureSelector:
             perm_importance = self.calculate_permutation_importance()
         else:
             perm_importance = self.perm_importance
+        
         perm_importance_df = pd.DataFrame({
             'Feature': self.X_test.columns,
             'Importance': perm_importance
