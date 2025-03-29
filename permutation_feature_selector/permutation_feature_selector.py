@@ -64,6 +64,9 @@ class PermutationFeatureSelector:
                 X_permuted = self.X_test.copy()
                 X_permuted.iloc[:, col] = np.random.permutation(X_permuted.iloc[:, col])
                 permuted_score = wrapped_model.score(X_permuted.values, self.y_test, self.metric)
+
+                # .valuesを外し、DataFrameのまま予測を渡す
+                permuted_score = wrapped_model.score(X_permuted, self.y_test, self.metric)
                 scores[n] = permuted_score
             
             if np.isnan(scores).all():
