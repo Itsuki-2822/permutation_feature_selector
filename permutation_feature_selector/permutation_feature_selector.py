@@ -7,7 +7,7 @@ import lightgbm as lgb
 class PermutationFeatureSelector:
     def __init__(self, model, X_test, y_test, metric='rmse', n_repeats=30, random_state=None):
         self.model = model
-        self.X_test = X_test
+        self.X_test = X_test.replace({pd.NA: np.nan})
         self.y_test = y_test
         self.metric = metric
         self.n_repeats = n_repeats
@@ -38,7 +38,7 @@ class PermutationFeatureSelector:
 
         def predict(self, X):
             if self.use_wrapper:
-                return self.model.predict(X, num_iteration=-1)  # 修正: `best_iteration` ではなく `-1` をデフォルト
+                return self.model.predict(X, num_iteration=-1)
             else:
                 return self.model.predict(X)
 
@@ -57,23 +57,20 @@ class PermutationFeatureSelector:
     def calculate_permutation_importance(self):
         wrapped_model = self.ModelWrapper(self.model, self.use_wrapper, self.metric_funcs)
         feature_importances = np.zeros(self.X_test.shape[1])
-
-        self.X_test = self.X_test.replace({pd.NA: np.nan})
-
+        
         for col in range(self.X_test.shape[1]):
             scores = np.zeros(self.n_repeats)
             for n in range(self.n_repeats):
                 X_permuted = self.X_test.copy()
                 X_permuted.iloc[:, col] = np.random.permutation(X_permuted.iloc[:, col])
-                permuted_score = wrapped_model.score(X_permuted.values, self.y_test, self.metric)
-
+                # DataFrame を直接渡すように修正
                 permuted_score = wrapped_model.score(X_permuted, self.y_test, self.metric)
                 scores[n] = permuted_score
             
             if np.isnan(scores).all():
                 feature_importances[col] = 0  
             else:
-                feature_importances[col] = self.base_score - np.nanmean(scores) 
+                feature_importances[col] = self.base_score - np.nanmean(scores)
         
         self.perm_importance = feature_importances
         return feature_importances
@@ -120,9 +117,3 @@ class PermutationFeatureSelector:
         }).sort_values(by='Importance', ascending=False)
 
         return chosen_features, chosen_features_df
-
-#permutation_importance = PermutationFeatureSelector(model, X_test, y_test, metric='rmse', random_state=42)
-#permutation_importance.plot_permutation_importance(figsize=(12, 10), positive_color='blue', negative_color='red')
-#selected_features, selected_features_df = permutation_importance.choose_feat(threshold_method='value', threshold_value=1) 
-#display(len(selected_features))
-#display(selected_features_df)
