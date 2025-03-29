@@ -58,7 +58,7 @@ class PermutationFeatureSelector:
         wrapped_model = self.ModelWrapper(self.model, self.use_wrapper, self.metric_funcs)
         feature_importances = np.zeros(self.X_test.shape[1])
 
-        X_test = self.X_test.replace({pd.NA: np.nan})
+        self.X_test = self.X_test.replace({pd.NA: np.nan})
 
         for col in range(self.X_test.shape[1]):
             scores = np.zeros(self.n_repeats)
