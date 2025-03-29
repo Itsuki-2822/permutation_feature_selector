@@ -58,6 +58,8 @@ class PermutationFeatureSelector:
         wrapped_model = self.ModelWrapper(self.model, self.use_wrapper, self.metric_funcs)
         feature_importances = np.zeros(self.X_test.shape[1])
 
+        X_test = self.X_test.replace({pd.NA: np.nan})
+
         for col in range(self.X_test.shape[1]):
             scores = np.zeros(self.n_repeats)
             for n in range(self.n_repeats):
@@ -65,7 +67,6 @@ class PermutationFeatureSelector:
                 X_permuted.iloc[:, col] = np.random.permutation(X_permuted.iloc[:, col])
                 permuted_score = wrapped_model.score(X_permuted.values, self.y_test, self.metric)
 
-                # .valuesを外し、DataFrameのまま予測を渡す
                 permuted_score = wrapped_model.score(X_permuted, self.y_test, self.metric)
                 scores[n] = permuted_score
             
